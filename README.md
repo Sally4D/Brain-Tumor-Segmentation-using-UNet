@@ -1,120 +1,164 @@
-# 🧠 Brain Tumor Segmentation using UNet (Streamlit App)
+# Brain Tumor Segmentation using UNet
 
-This project presents a web-based application built with Streamlit and PyTorch for the segmentation of brain tumors from MRI scans. It utilizes a UNet deep learning model to identify tumor regions and provides interactive visualizations, quantitative metrics, and AI-powered clinical interpretations using the Google Gemini API.
+![Brain Tumor Segmentation](https://img.shields.io/badge/Medical%20Imaging-Brain%20Tumor%20Segmentation-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.30+-green)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-## ✨ Features
+A deep learning application for automatic segmentation of brain tumors from MRI scans using a UNet neural network architecture. This web-based tool allows users to upload NIfTI format brain MRI scans and receive instant tumor segmentation results with comprehensive analysis and visualization options.
 
-* **NIfTI File Upload**: Easily upload brain MRI scans in `.nii` or `.nii.gz` formats.
-* **Interactive Slice Navigation**: Explore MRI volumes across Axial, Sagittal, and Coronal views with a dynamic slider.
-* **UNet Deep Learning Model**: Automatic segmentation of tumor regions using a pre-trained UNet architecture.
-* **Tumor Visualization**:
-    * Original MRI slice display.
-    * Tumor confidence maps to visualize prediction strength.
-    * Overlay with tumor outline or custom colormaps (Hot, Viridis, Jet, Cool) for clear identification.
-* **Quantitative Tumor Metrics**: Get instant statistics like tumor pixel count, percentage of slice, dimensions (width, height), approximate diameter, perimeter, and circularity.
-* **AI Clinical Interpretation**: Leverage the Google Gemini API to generate concise, clinically-oriented explanations of the segmentation results, including potential diagnoses and next steps.
-* **Multi-Slice Visualization**: View a series of adjacent slices to understand the 3D extent of the tumor.
-* **Sample Data Option**: Test the application with synthetic brain MRI data if you don't have your own files.
-* **Export Results**: Download the segmented tumor mask or the overlay image as PNG files.
-* **Advanced Settings**: Adjust segmentation thresholds, image normalization methods, and apply post-processing like smoothing.
+## Features
 
-## 🚀 Getting Started
+- **Advanced Tumor Segmentation**: Using state-of-the-art UNet architecture trained on BraTS2020 dataset
+- **Interactive Visualization**: Explore MRI scans with multiple view orientations (Axial, Sagittal, Coronal)
+- **Detailed Tumor Metrics**: Quantitative analysis including size, shape, location, and morphology
+- **AI-Powered Clinical Interpretations**: Optional clinical assessment using Google's Gemini AI (requires API key)
+- **User-Friendly Interface**: Built with Streamlit for an intuitive and responsive experience
+- **Versatile Visualization Options**: Multiple overlay styles and confidence mapping
 
-Follow these instructions to set up and run the application locally.
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technical Details](#technical-details)
+- [Features In-Depth](#features-in-depth)
+- [AI Explanations](#ai-explanations)
+- [Sample Data](#sample-data)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Installation
 
 ### Prerequisites
 
-* Python 3.8+
-* `pip` (Python package installer)
+- Python 3.8+
+- pip package manager
 
-### Installation
+### Setup
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
-    cd your-repo-name
-    ```
-    (Replace `your-username/your-repo-name` with your actual GitHub repository path.)
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/brain-tumor-segmentation.git
+   cd brain-tumor-segmentation
+   ```
 
-2.  **Create a virtual environment (recommended):**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    ```
+2. Install required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-3.  **Install the required Python packages:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-    If you don't have a `requirements.txt` file, you can create one with the following contents based on the provided `App.py`:
-    ```
-    streamlit>=1.0.0
-    torch
-    numpy
-    matplotlib
-    nibabel
-    Pillow
-    requests
-    scipy # For smoothing, if used
-    scikit-image # For contour finding
-    google-generativeai
-    ```
+3. Run the application:
+   ```bash
+   streamlit run App.py
+   ```
 
-4.  **Set up Google Gemini API Key:**
-    The provided code uses a placeholder API key. For actual use, it's highly recommended to use Streamlit's secrets management.But first you will need an API key
-    
-    ✅ How to Get Your Gemini (Generative AI) API Key
-Step 1: Create or Select a Project
-Click the Select a project button at the top. Then:
-Either create a new project or select an existing one.
-Give it a name like "GeminiApp".
+The application should now be running on your local machine at `http://localhost:8501`.
 
-Step 2: Enable the Gemini API
-Once you're inside the project:
+## Usage
 
-Click the top-left menu (☰) > APIs & Services > Library.
-Search for:
+### Basic Operation
 
-Gemini API or
+1. **Launch the application** by running `streamlit run App.py`
+2. **Upload an MRI scan** in NIfTI format (.nii or .nii.gz), or use the provided sample data
+3. **Select the view orientation** (Axial, Sagittal, or Coronal)
+4. **Navigate through slices** using the slider
+5. **Adjust segmentation parameters** in the sidebar if needed
+6. **View results** including segmentation overlay and metrics
+7. **Download** images or reports for further use
 
-Generative Language API (under Vertex AI API or PaLM API)
-Click it, then press Enable.
+### Advanced Options
 
-Step 3: Create Credentials (API Key)
-Go to the left menu again:
+- **Adjust the segmentation threshold** to fine-tune tumor detection sensitivity
+- **Select different normalization methods** to optimize for different MRI acquisition parameters
+- **Change overlay styles** for better visualization
+- **Enable batch processing** for analyzing multiple slices simultaneously
 
-APIs & Services > Credentials
-Click + Create Credentials > API key
+## Technical Details
 
-Your key will be generated. Copy and save it securely.
-(Optional but recommended) Restrict the key to only the Gemini API for safety.
+### Model Architecture
 
-Step 4: Use the Key in Your App
-Put it into your .env file like this:
+The application uses a UNet model with the following characteristics:
+- **Architecture**: Standard U-Net with encoder-decoder and skip connections
+- **Input**: 2D MRI slices (normalized)
+- **Output**: Probabilistic segmentation maps
+- **Training Data**: BraTS2020 dataset (Multimodal Brain Tumor Segmentation Challenge)
 
-env
-Copy
-Edit
-GEMINI_API_KEY=your-generated-api-key
-Or into your secrets.toml (if using Streamlit Secrets):
+### Image Processing Pipeline
 
-toml
-Copy
-Edit
-[general]
-GEMINI_API_KEY = "your-generated-api-key"
+1. **Loading**: NIfTI files are loaded using nibabel
+2. **Preprocessing**: Slices are extracted and normalized
+3. **Inference**: The model processes the slice and produces a segmentation mask
+4. **Postprocessing**: Results are analyzed for metrics calculation and visualization
 
-    * Create a `.streamlit` folder in your project's root directory.
-    * Inside `.streamlit`, create a file named `secrets.toml`.
-    * Add your Gemini API key to `secrets.toml`:
-        ```toml
-        GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
-        ```
-    * Replace API key in `App.py` with `st.secrets["GEMINI_API_KEY"]` for the `api_key` variable within `initialize_gemini_api()`.
+## Features In-Depth
 
-### Running the Application
+### Tumor Metrics
 
-Once you have everything set up, run the Streamlit app from your terminal:
+The application calculates comprehensive metrics including:
+- **Size**: Area in pixels, percentage of slice occupied
+- **Dimensions**: Width, height, estimated diameter
+- **Shape Analysis**: Perimeter, circularity index
+- **Location**: Center coordinates, bounding box
 
-```bash
-streamlit run App.py
+### Visualization Options
+
+- **Contour Overlay**: Highlighting tumor boundaries on the original image
+- **Heatmap Overlay**: Color-coded visualization of tumor regions
+- **Confidence Map**: Visualization of the model's prediction confidence
+- **Multiple color schemes**: hot, viridis, jet, cool
+
+## AI Explanations
+
+The application optionally integrates with Google's Gemini API to provide AI-powered clinical interpretations of the segmentation results.
+
+### Setting Up Gemini Integration
+
+1. Obtain a Google Gemini API key from the [Google AI Studio](https://ai.google.dev/)
+2. In the application sidebar, expand "🔑 AI Explanation Settings"
+3. Enter your API key and click "Activate API"
+4. Enable "Show AI Clinical Explanation" in the sidebar options
+
+The AI will analyze the tumor characteristics and provide clinical insights including:
+- Potential diagnosis and differential considerations
+- Relevant observations about tumor morphology
+- Suggested next steps in clinical evaluation
+
+## Sample Data
+
+The application includes synthetic sample brain MRI data for testing and demonstration purposes. This can be accessed by checking the "Use sample data instead" option on the main interface.
+
+## Project Structure
+
+```
+brain-tumor-segmentation/
+├── App.py                # Main application file
+├── requirements.txt      # Python dependencies
+├── logo.png              # Application logo
+├── checkpoint-epoch-29.pt # Pre-trained model weights
+└── README.md             # This documentation
+```
+
+## Contributing
+
+Contributions to improve the application are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- BraTS challenge organizers for the inspiration and training data concepts
+- PyTorch team for the deep learning framework
+- Streamlit team for the web application framework
+
+---
+
+**Note**: This application is intended for research and educational purposes only and should not be used for clinical diagnosis without proper validation and expert medical oversight.
