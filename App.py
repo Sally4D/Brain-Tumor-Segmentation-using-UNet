@@ -476,58 +476,8 @@ def plot_with_tumor_outline(ax, mri_slice, segmentation, title):
 
 
 def create_sample_brain_data():
-    """Create synthetic brain MRI data for testing"""
-    try:
-        # Create a 3D array to represent brain volume (256x256x128)
-        shape = (256, 256, 128)
-        data = np.zeros(shape)
-
-        # Create a sphere in the middle to simulate brain tissue
-        x, y, z = np.ogrid[:shape[0], :shape[1], :shape[2]]
-        center = (shape[0] // 2, shape[1] // 2, shape[2] // 2)
-        radius = min(shape) // 3
-
-        # Create brain-like structure (ellipsoid)
-        brain_mask = ((x - center[0]) ** 2 + (y - center[1]) ** 2) / ((radius * 1.2) ** 2) + \
-                     ((z - center[2]) ** 2) / (radius ** 2) <= 1
-
-        # Set values for the brain region (random values but higher than background)
-        data[brain_mask] = np.random.uniform(0.5, 1.0, size=np.sum(brain_mask))
-
-        # Add "ventricles" as darker regions
-        ventricle_center = center
-        ventricle_radius = radius // 4
-        ventricle_mask = ((x - ventricle_center[0]) ** 2 +
-                          (y - ventricle_center[1]) ** 2 +
-                          (z - ventricle_center[2]) ** 2) <= ventricle_radius ** 2
-        data[ventricle_mask & brain_mask] = np.random.uniform(0.1, 0.3, size=np.sum(ventricle_mask & brain_mask))
-
-        # Create a "tumor" as a bright spot
-        tumor_center = (center[0] + radius // 2, center[1] - radius // 2, center[2])
-        tumor_radius = radius // 5
-        tumor_mask = ((x - tumor_center[0]) ** 2 +
-                      (y - tumor_center[1]) ** 2 +
-                      (z - tumor_center[2]) ** 2) <= tumor_radius ** 2
-        data[tumor_mask & brain_mask] = np.random.uniform(0.8, 1.0, size=np.sum(tumor_mask & brain_mask))
-
-        # Add noise
-        data += np.random.normal(0, 0.05, size=shape)
-
-        # Normalize values to [0, 1]
-        data = np.clip(data, 0, 1)
-
-        # Create affine matrix (identity for simplicity)
-        affine = np.eye(4)
-
-        # Create NIfTI image
-        nifti_img = nib.Nifti1Image(data, affine)
-
-        return nifti_img
-
-    except Exception as e:
-        st.error(f"Error creating sample data: {str(e)}")
-        return None
-
+    nifti_img = nib.load("Validation Data/BraTS20_1.nii")
+    return nifti_img
 
 # ------------------ UI STYLING ------------------
 
