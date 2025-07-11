@@ -535,7 +535,7 @@ st.markdown("""
 
 def main():
     # App header
-    st.markdown("<h1 class='main-title'>Brain Tumor Segmentation using UNet</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='main-title'>NeuroGem: Brain Tumor Analysis with AI</h1>", unsafe_allow_html=True)
     # Initialize session state variables if they don't exist
     if 'gemini_model' not in st.session_state:
         st.session_state.gemini_model = None
