@@ -6,6 +6,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 A deep learning application for automatic segmentation of brain tumors from MRI scans using a UNet neural network architecture. This web-based tool allows users to upload NIfTI format brain MRI scans and receive instant tumor segmentation results with comprehensive analysis and visualization options.
+#### Checkout the app here: https://brain-tumor-segmentation-using-unet-python.streamlit.app/
 
 ## Features
 
